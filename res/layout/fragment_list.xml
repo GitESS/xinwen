@@ -2,11 +2,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-
+    android:paddingBottom="10dp"
     android:paddingLeft="10dp"
-   android:paddingRight="10dp"
-   android:paddingBottom="10dp"
-  >
+    android:paddingRight="10dp" >
 
     <ListView
         android:id="@+id/listView"
@@ -15,8 +13,7 @@
         android:divider="#ddd"
         android:dividerHeight="4px"
         android:paddingLeft="5dp"
-         android:paddingRight="5dp"
-       
+        android:paddingRight="5dp"
         android:scrollbars="none" />
 
 </FrameLayout>

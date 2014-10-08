@@ -55,7 +55,6 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.astuetz.viewpager.extensions.sample.R;
 import com.nineoldandroids.view.ViewHelper;
 
-
 public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 		ViewPager.OnPageChangeListener {
 
@@ -69,7 +68,7 @@ public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 	private int currentColor = 0xFF666666;
 
 	// AmazingActionBar
-	private static final String TAG = "NoBoringActionBarActivity";
+	
 	private int mActionBarTitleColor;
 	private int mActionBarHeight;
 	private int mHeaderHeight;
@@ -79,8 +78,6 @@ public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 	private ImageView mHeaderLogo;
 	private View mHeader;
 	private View mPlaceHolderView;
-	private AccelerateDecelerateInterpolator mSmoothInterpolator;
-
 	private RectF mRect1 = new RectF();
 	private RectF mRect2 = new RectF();
 
@@ -109,8 +106,7 @@ public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 
 		// changeColor(currentColor);
 
-		// AmazingActionBar
-		mSmoothInterpolator = new AccelerateDecelerateInterpolator();
+		new AccelerateDecelerateInterpolator();
 		mHeaderHeight = getResources().getDimensionPixelSize(
 				R.dimen.header_height);
 		mMinHeaderTranslation = -mHeaderHeight + getActionBarHeight()
@@ -134,7 +130,7 @@ public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 		adapter.setTabHolderScrollingContent(this);
 		tabs.setViewPager(pager);
 		tabs.setOnPageChangeListener(this);
-		mSpannableString = new SpannableString("Philosophy Phill");
+		mSpannableString = new SpannableString("Google News");
 		// mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(0xffffffff);
 		tabs.setTextColor(Color.parseColor("#1aff87"));
 		tabs.setTextSize(25);
@@ -307,43 +303,6 @@ public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 
 	}
 
-	// private void setupListView() {
-	// ArrayList<String> FAKES = new ArrayList<String>();
-	// for (int i = 0; i < 1000; i++) {
-	// FAKES.add("entry " + i);
-	// }
-	// mPlaceHolderView = getLayoutInflater().inflate(
-	// R.layout.view_header_placeholder, mListView, false);
-	// mListView.addHeaderView(mPlaceHolderView);
-	// mListView.setAdapter(new ArrayAdapter<String>(this,
-	// android.R.layout.simple_list_item_1, FAKES));
-	// mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-	// @Override
-	// public void onScrollStateChanged(AbsListView view, int scrollState) {
-	// }
-	//
-	// @Override
-	// public void onScroll(AbsListView view, int firstVisibleItem,
-	// int visibleItemCount, int totalItemCount) {
-	// int scrollY = getScrollY();
-	// // sticky actionbar
-	// mHeader.setTranslationY(Math.max(-scrollY,
-	// mMinHeaderTranslation));
-	// // header_logo --> actionbar icon
-	// float ratio = clamp(mHeader.getTranslationY()
-	// / mMinHeaderTranslation, 0.0f, 1.0f);
-	// interpolate(mHeaderLogo, getActionBarIconView(),
-	// mSmoothInterpolator.getInterpolation(ratio));
-	// // actionbar title alpha
-	// // getActionBarTitleView().setAlpha(clamp(5.0F * ratio - 4.0F,
-	// // 0.0F, 1.0F));
-	// // ---------------------------------
-	// // better way thanks to @cyrilmottier
-	// setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
-	// }
-	// });
-	// }
-
 	private void setTitleAlpha(float alpha) {
 		mAlphaForegroundColorSpan.setAlpha(alpha);
 		mSpannableString.setSpan(mAlphaForegroundColorSpan, 0,
@@ -383,39 +342,15 @@ public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 		return rect;
 	}
 
-	// public int getScrollY() {
-	// View c = mListView.getChildAt(0);
-	// if (c == null) {
-	// return 0;
-	// }
-	//
-	// int firstVisiblePosition = mListView.getFirstVisiblePosition();
-	// int top = c.getTop();
-	//
-	// int headerHeight = 0;
-	// if (firstVisiblePosition >= 1) {
-	// headerHeight = mPlaceHolderView.getHeight();
-	// }
-	//
-	// return -top + firstVisiblePosition * c.getHeight() + headerHeight;
-	// }
-
 	private void setupActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setIcon(R.drawable.ic_transparent);
 
-		// getActionBarTitleView().setAlpha(0f);
 	}
 
 	private ImageView getActionBarIconView() {
 		return (ImageView) findViewById(android.R.id.home);
 	}
-
-	/*
-	 * private TextView getActionBarTitleView() { int id =
-	 * Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
-	 * return (TextView) findViewById(id); }
-	 */
 
 	public int getActionBarHeight() {
 		if (mActionBarHeight != 0) {
@@ -535,20 +470,4 @@ public class MainActivity extends FragmentActivity implements ScrollTabHolder,
 
 		return -top + firstVisiblePosition * c.getHeight() + headerHeight;
 	}
-
-//	@Override
-//	public void onWindowFocusChanged(boolean hasFocus) {
-//		super.onWindowFocusChanged(hasFocus);
-//		if (hasFocus) {
-//			if (android.os.Build.VERSION.SDK_INT >= 19) {
-//				getWindow().getDecorView().setSystemUiVisibility(
-//						View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//								| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//								| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//								| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//								| View.SYSTEM_UI_FLAG_FULLSCREEN
-//								| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-//			}
-//		}
-//	}
 }

@@ -26,10 +26,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,8 +125,8 @@ public class AwesomeCardFragment extends ScrollTabHolderFragment implements
 
 		mListView.addHeaderView(placeHolderView);
 
-		// String rss_link = "http://news.google.com/?output=rss";
-		String rss_link = "http://www.thehindu.com/?service=rss";
+		String rss_link = "http://news.google.com/?output=rss";
+		// String rss_link = "http://www.thehindu.com/?service=rss";
 
 		new loadRSSFeedItems().execute(rss_link);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -127,15 +134,15 @@ public class AwesomeCardFragment extends ScrollTabHolderFragment implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-//				Intent in = new Intent(getActivity(),
-//						DisPlayWebPageActivity.class);
-//
-//				// getting page url
-//				// String page_url = ((TextView)
-//				// view.findViewById(R.id.page_url))
-//				// .getText().toString();
-//				in.putExtra("page_url", LIST_LINK.get(position));
-//				startActivity(in);
+				Intent in = new Intent(getActivity(),
+						DisPlayWebPageActivity.class);
+
+				// getting page url
+				// String page_url = ((TextView)
+				// view.findViewById(R.id.page_url))
+				// .getText().toString();
+				in.putExtra("page_url", LIST_LINK.get(position));
+				startActivity(in);
 			}
 		});
 
@@ -206,9 +213,10 @@ public class AwesomeCardFragment extends ScrollTabHolderFragment implements
 
 			// list of rss items
 			rssItems = rssParser.getRSSFeedItems(rss_url);
-
+			int newscounter = 0;
 			// looping through each item
 			for (RSSItem item : rssItems) {
+
 				// creating new HashMap
 				HashMap<String, String> map = new HashMap<String, String>();
 
@@ -217,22 +225,53 @@ public class AwesomeCardFragment extends ScrollTabHolderFragment implements
 				map.put(TAG_LINK, item.getLink());
 				map.put(TAG_PUB_DATE, item.getPubdate()); // If you want parse
 															// the date
-				String description = item.getDescription();
+				// String description = item.getDescription();
+				String htmlpars = item.getDescription();
 				// taking only 200 chars from description
-				if (description.length() > 100) {
-					description = description.substring(0, 97) + "..";
-				}
+				// if (description.length() > 100) {
+				// description = description.substring(0, 97) + "..";
+				// }
 				// String abc = ""+Html.fromHtml(description);
-				map.put(TAG_DESRIPTION, description);
+
+				// Parsing Data
+
+				String newsDescription = "";
+				Document doc = Jsoup.parse(htmlpars, "", Parser.xmlParser());
+				Elements tr1 = doc.select("td.j");// j is class, td is tag.
+				for (Element element : tr1) {
+					// will get description
+					newsDescription = element.text();
+					// System.out.println(element.previousElementSibling().text()
+					// + ": " + element.text());
+					if (newsDescription.length() > 100) {
+						newsDescription = newsDescription.substring(0, 97)
+								+ "..";
+					}
+
+				}
+
+				map.put(TAG_DESRIPTION, newsDescription);
+
+				// Elements metatbody = metaElems.select("tbody");
+				// Elements tr = metatbody.select("tr");
+				//
+				// Log.i("Awesome", "tr" + tr);
+				// Elements tr1 = metatbody.select("tr");
+				// Log.i("Awesome", "tr1" + tr1);
+				// String name = tr1.attr("b");
+				// Log.i("Awesome", "trString" + name);
+				// String name = metaElems.attr("b");
+				// Log.i("Awesome", "name" + name);
 
 				// String mString = description;
 
 				// adding HashList to ArrayList
 				rssItemList.add(map);
 				LIST_TITLE.add(item.getTitle());
-				LIST_DESRIPTION.add(description);
+				LIST_DESRIPTION.add(newsDescription);
 				LIST_PUB_DATE.add(item.getPubdate());
 				LIST_LINK.add(item.getLink());
+
 			}
 
 			// updating UI from Background Thread
